@@ -23,7 +23,7 @@ This is a simple auto-clicker script written in Python using the `pyautogui` mod
 
 2. **Create a virtual environment (optional but recommended):**
     ```sh
-    python -m venv venv
+    python3 -m venv venv      # On Windows use "python -m venv venv"
     source venv/bin/activate  # On Windows use `venv\Scripts\activate`
     ```
 
