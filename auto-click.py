@@ -1,7 +1,7 @@
-import pyautogui
+import pyautogui # type: ignore
 import time
 from datetime import datetime
-import pytz
+import pytz # type: ignore
 
 
 def auto_click():
@@ -13,7 +13,7 @@ def auto_click():
             current_time = datetime.now(cairo_tz)
 
             # Check if it's the first second of the minute or the 30th second
-            if current_time.second == 0 or current_time.second == 30:
+            if current_time.second == 0: # or current_time.second == 30:
                 # Get the current mouse cursor position
                 current_x, current_y = pyautogui.position()
 
