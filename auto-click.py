@@ -16,6 +16,8 @@ def auto_click():
             if current_time.second == 0 or current_time.second == 30:
                 # Get the current mouse cursor position
                 current_x, current_y = pyautogui.position()
+                # current_x, current_y = 849, 519
+
 
                 # Perform a left mouse button click at the current position
                 pyautogui.click(current_x, current_y)
