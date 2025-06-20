@@ -6,33 +6,43 @@ import pytz  # type: ignore
 
 def auto_click():
     cairo_tz = pytz.timezone("Africa/Cairo")
-    click_count = 0  # عداد الكلكات
+    total_click_count = 0
+    hourly_click_count = 0
+
+    last_recorded_hour = datetime.now(cairo_tz).hour
 
     try:
-        print("Auto Clicker started. Press Ctrl-C to quit.")
+        print("✅ Auto Clicker started. Press Ctrl-C to quit.")
         while True:
-            # Get the current time in Cairo timezone
             current_time = datetime.now(cairo_tz)
+            current_hour = current_time.hour
 
-            # Check if it's the first second of the minute
-            if current_time.second == 0:  # or current_time.second == 30:
-                # Get the current mouse cursor position
-                current_x, current_y = pyautogui.position()
-
-                # Perform a left mouse button click at the current position
-                pyautogui.click(current_x, current_y)
-                click_count += 1  # زيادة العداد
+            if current_hour != last_recorded_hour:
                 print(
-                    f"Clicked #{click_count} at ({current_x}, {current_y}) at {current_time.strftime('%H:%M:%S')}"
+                    f"🕒 Hour changed from {last_recorded_hour:02d}:00 to {current_hour:02d}:00. "
+                    f"🧮 Clicks in the previous hour: {hourly_click_count}"
+                )
+                last_recorded_hour = current_hour
+                hourly_click_count = 0
+
+            if current_time.second == 0:
+                current_x, current_y = pyautogui.position()
+                pyautogui.click(current_x, current_y)
+
+                total_click_count += 1
+                hourly_click_count += 1
+
+                print(
+                    f"🖱️ Clicked #{total_click_count} "
+                    f"(This hour [{current_hour:02d}:00]: {hourly_click_count}) "
+                    f"at ({current_x}, {current_y}) ⏰ {current_time.strftime('%H:%M:%S')}"
                 )
 
-                # Wait for a bit to avoid multiple clicks within the same second
-                time.sleep(1.1)  # Sleep for slightly more than 1 second
+                time.sleep(1.1)
 
-            # Sleep for a short period to avoid excessive CPU usage
             time.sleep(0.1)
     except KeyboardInterrupt:
-        print(f"\nAuto Clicker stopped. Total clicks: {click_count}")
+        print(f"\n🛑 Auto Clicker stopped. Total clicks: {total_click_count} 🎯")
 
 
 if __name__ == "__main__":
