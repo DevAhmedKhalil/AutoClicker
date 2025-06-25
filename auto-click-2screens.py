@@ -12,13 +12,15 @@ def wait_for_click_position(order):
 def auto_click():
     cairo_tz = pytz.timezone("Africa/Cairo")
 
-    # سجل موضعي الشاشتين بناءً على إدخال المستخدم
     pos1 = wait_for_click_position("1 (First Screen)")
     time.sleep(0.5)
     pos2 = wait_for_click_position("2 (Second Screen)")
     time.sleep(0.5)
 
     click_count = 0
+    last_main_click_minute = -1
+    last_clicked_position = None
+    ready_for_extra_click = False  # الشرط الجديد
 
     try:
         print("\n[▶] Auto Clicker started. Press Ctrl-C to quit.\n")
@@ -27,29 +29,34 @@ def auto_click():
             minute = current_time.minute
             second = current_time.second
 
-            if second == 0:
+            # كليك أساسي عند الثانية 59
+            if second == 59 and last_main_click_minute != minute:
                 if minute % 2 == 1:
                     pyautogui.click(pos1)
-                    click_count += 1
-                    print(f"✅ #{click_count:03} | Clicked on 🖥 Screen 1 at {pos1} | 🕒 {current_time.strftime('%H:%M:%S')}")
+                    last_clicked_position = pos1
+                    screen = "Screen 1"
                 else:
                     pyautogui.click(pos2)
-                    click_count += 1
-                    print(f"✅ #{click_count:03} | Clicked on 🖥 Screen 2 at {pos2} | 🕒 {current_time.strftime('%H:%M:%S')}")
+                    last_clicked_position = pos2
+                    screen = "Screen 2"
+
+                click_count += 1
+                last_main_click_minute = minute
+                ready_for_extra_click = True  # يسمح بالضغط عند 30s فقط لو حصل كليك أساسي
+                print(f"✅ #{click_count:03} | Clicked on 🖥 {screen} at {last_clicked_position} | 🕒 {current_time.strftime('%H:%M:%S')}")
                 print("-" * 60)
                 time.sleep(1.1)
 
-            elif second == 30:
-                if minute % 2 == 1:
-                    pyautogui.click(pos1)
-                    print(f"🕧       | (30s) Extra Click on Screen 1 at {pos1} | 🕒 {current_time.strftime('%H:%M:%S')}")
-                else:
-                    pyautogui.click(pos2)
-                    print(f"🕧       | (30s) Extra Click on Screen 2 at {pos2} | 🕒 {current_time.strftime('%H:%M:%S')}")
+            # كليك إضافي عند الثانية 30 **فقط إذا حصل كليك أساسي قبلها**
+            elif second == 30 and ready_for_extra_click:
+                pyautogui.click(last_clicked_position)
+                print(f"🕧       | (30s) Extra Click on same screen at {last_clicked_position} | 🕒 {current_time.strftime('%H:%M:%S')}")
                 print("-" * 60)
+                ready_for_extra_click = False  # خلصنا الكليك الإضافي، نمنعه لحد ما يحصل كليك أساسي جديد
                 time.sleep(1.1)
 
             time.sleep(0.1)
+
     except KeyboardInterrupt:
         print(f"\n[⏹] Auto Clicker stopped. Total counted clicks: {click_count}")
 
