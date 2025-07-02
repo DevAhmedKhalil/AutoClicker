@@ -44,7 +44,7 @@ This is a simple auto-clicker script written in Python using the `pyautogui` mod
 
 1. **Run the script:**
     ```sh
-    python auto_click.py
+    python autoClicker.py
     ```
 
 2. **The auto-clicker will start clicking the current mouse cursor position at the first second of each minute and at the 30th second of each minute.**
