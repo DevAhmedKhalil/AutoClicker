@@ -30,7 +30,7 @@ def auto_click():
             second = current_time.second
 
             # كليك أساسي عند الثانية 59
-            if second == 59 and last_main_click_minute != minute:
+            if second == 58 and last_main_click_minute != minute:
                 if minute % 2 == 1:
                     pyautogui.click(pos1)
                     last_clicked_position = pos1

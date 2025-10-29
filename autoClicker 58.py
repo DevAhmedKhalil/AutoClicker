@@ -25,7 +25,7 @@ def auto_click():
                 last_recorded_hour = current_hour
                 hourly_click_count = 0
 
-            if current_time.second == 59:
+            if current_time.second == 58: # or current_time.second == 30:
                 current_x, current_y = pyautogui.position()
                 pyautogui.click(current_x, current_y)
 
