@@ -4,7 +4,7 @@ from datetime import datetime
 import pytz  # type: ignore
 
 
-def auto_click():
+def auto_click(click_seconds):
     cairo_tz = pytz.timezone("Africa/Cairo")
     total_click_count = 0
     hourly_click_count = 0
@@ -13,6 +13,8 @@ def auto_click():
 
     try:
         print("✅ Auto Clicker started. Press Ctrl-C to quit.")
+        print(f"⏱️ Will click at seconds: {click_seconds}")
+
         while True:
             current_time = datetime.now(cairo_tz)
             current_hour = current_time.hour
@@ -25,7 +27,8 @@ def auto_click():
                 last_recorded_hour = current_hour
                 hourly_click_count = 0
 
-            if current_time.second == 58: # or current_time.second == 30:
+            # الكليك في الثواني اللي اختارها المستخدم
+            if current_time.second in click_seconds:
                 current_x, current_y = pyautogui.position()
                 pyautogui.click(current_x, current_y)
 
@@ -41,9 +44,16 @@ def auto_click():
                 time.sleep(1.1)
 
             time.sleep(0.1)
+
     except KeyboardInterrupt:
         print(f"\n🛑 Auto Clicker stopped. Total clicks: {total_click_count} 🎯")
 
 
 if __name__ == "__main__":
-    auto_click()
+    # ⬇️ يطلب من المستخدم إدخال الثواني
+    user_input = input("⏱️ Enter seconds to click at (e.g. 0,30): ")
+
+    # تحويل الإدخال لقائمة أرقام
+    click_seconds = [int(s.strip()) for s in user_input.split(",")]
+
+    auto_click(click_seconds)
